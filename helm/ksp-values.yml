@@ -1,0 +1,28 @@
+# Installation : helm upgrade -i prometheus-stack prometheus-community/kube-prometheus-stack --create-namespace --namespace monitoring -f ksp-values.yml
+
+prometheus:
+  prometheusSpec:
+    storageSpec: 
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+             storage: 25Gi
+    retention: 10d
+    additionalScrapeConfigs: |
+      - job_name: minio-job
+        bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwcm9tZXRoZXVzIiwic3ViIjoiYWRtaW4iLCJleHAiOjQ4NTI0NTkwNzJ9.TmSQiLJM0ZdmtXmGddMYI3lsCVXEreG9q9oPu3it9QvEkombX8SMGxrfxYfhuGGMKNFmJDoz6MXj96tJAuIhAA
+        metrics_path: /minio/v2/metrics/cluster
+        scheme: https
+        static_configs:
+        - targets: ['s3storage.mamath.ninja:9000']
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.mathieu.local
+
+grafana:
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.mathieu.local

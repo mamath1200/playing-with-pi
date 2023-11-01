@@ -1,0 +1,4 @@
+# Installation : helm upgrade -i ingress-nginx oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller --create-namespace --namespace ingress-nginx -f ingress-nginx-values.yml
+
+ingressClassResource:
+  default: true

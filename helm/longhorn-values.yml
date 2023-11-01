@@ -1,0 +1,6 @@
+# Installation : helm upgrade -i longhorn longhorn/longhorn --create-namespace --namespace longhorn-system -f longhorn-values.yml
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  host: longhorn.mathieu.local
