@@ -1,0 +1,52 @@
+# Installation : helm upgrade -i velero vmware-tanzu/velero --create-namespace --namespace velero --values velero-values.yml 
+
+configuration:
+  backupStorageLocation:
+  - name: cluster-backup
+    provider: aws
+    bucket: cluster-backup
+    credential:
+      name: aws-credentials
+      key: cloud
+    config:
+      region: eu-west-3
+      s3ForcePathStyle: true
+      s3Url: https://s3storage.mamath.ninja:9000
+  volumeSnapshotLocation:
+  - name: cluster-snapshot
+    provider: aws
+    credential:
+      name: aws-credentials
+      key: cloud
+    config:
+      region: eu-west-3
+  defaultBackupStorageLocation: cluster-backup
+  defaultVolumeSnapshotLocation: cluster-snapshot
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.8.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+
+credential:
+  useSecret: true
+  existingSecret: aws-credentials
+
+schedules:
+  mybackup:
+    disabled: false
+    schedule: "0 3 * * *"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "72h"
+      storageLocation: cluster-backup
+      snapshotLocation: cluster-snapshot
+      includedAllNamespaces: true
+      defaultVolumesToRestic: true
+
+
+deployNodeAgent: true

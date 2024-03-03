@@ -1,0 +1,2 @@
+# installation : helm upgrade -i elastic-operator elastic/eck-operator --create-namespace --namespace elastic-system -f eck-values.yml
+
