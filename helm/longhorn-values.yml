@@ -2,5 +2,8 @@
 
 ingress:
   enabled: true
-  ingressClassName: nginx
   host: longhorn.mathieu.local
+persistence:
+  defaultClassReplicaCount: 2
+defaultSettings:
+  defaultReplicaCount: 2
